@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopta una Mascota - Refugio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .mascot-card {
+            transition: all 0.3s ease;
+        }
+        .mascot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navegación -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🐾</span>
+                    <h1 class="text-xl font-bold text-gray-800">Refugio de Mascotas</h1>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Inicio</a>
+                    <a href="mascotas.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Ingresar Mascota</a>
+                    <a href="adopciones.html" class="bg-blue-600 text-white px-3 py-2 rounded font-medium">Adoptar</a>
+                    <a href="contacto.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Modal de adopción -->
+    <div id="adoptionModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <span class="mr-2">💖</span>
+                        Solicitud de Adopción
+                    </h2>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                        <span class="text-2xl">&times;</span>
+                    </button>
+                </div>
+                
+                <div id="selectedPetInfo" class="bg-blue-50 rounded-lg p-4 mb-6"></div>
+                
+                <form id="adoptionForm" class="space-y-6">
+                    <input type="hidden" id="selectedPetId" name="mascotaId">
+                    
+                    <!-- Información personal -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📝 Información Personal</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre completo *</label>
+                                <input type="text" name="nombre" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono *</label>
+                                <input type="tel" name="telefono" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información del hogar -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🏠 Información del Hogar</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Dirección completa *</label>
+                                <textarea name="direccion" required rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de vivienda *</label>
+                                    <select name="tipoVivienda" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Seleccionar...</option>
+                                        <option value="casa">Casa</option>
+                                        <option value="apartamento">Apartamento</option>
+                                        <option value="casa_jardin">Casa con jardín</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">¿Tienes otras mascotas? *</label>
+                                    <select name="otrasMascotas" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Seleccionar...</option>
+                                        <option value="no">No</option>
+                                        <option value="perros">Sí, tengo perros</option>
+                                        <option value="gatos">Sí, tengo gatos</option>
+                                        <option value="ambos">Sí, tengo perros y gatos</option>
+                                        <option value="otros">Sí, tengo otras mascotas</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experiencia -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🎓 Experiencia con Mascotas</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">¿Has tenido mascotas antes? *</label>
+                                <select name="experiencia" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="primera_vez">Es mi primera mascota</option>
+                                    <option value="poca">Poca experiencia</option>
+                                    <option value="moderada">Experiencia moderada</option>
+                                    <option value="mucha">Mucha experiencia</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">¿Por qué quieres adoptar esta mascota? *</label>
+                                <textarea name="motivacion" required rows="3" placeholder="Cuéntanos qué te motivó a querer adoptar..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disponibilidad -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">⏰ Disponibilidad y Cuidados</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Horas diarias disponibles para la mascota *</label>
+                                <select name="horasDisponibles" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="1-3">1-3 horas</option>
+                                    <option value="4-6">4-6 horas</option>
+                                    <option value="6-8">6-8 horas</option>
+                                    <option value="8+">Más de 8 horas</option>
+                                    <option value="todo_dia">Todo el día</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Presupuesto mensual para gastos veterinarios *</label>
+                                <select name="presupuesto" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="500-1000">$500 - $1,000</option>
+                                    <option value="1000-2000">$1,000 - $2,000</option>
+                                    <option value="2000-3000">$2,000 - $3,000</option>
+                                    <option value="3000+">Más de $3,000</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition font-semibold flex items-center justify-center">
+                            <span class="mr-2">💖</span>
+                            Enviar Solicitud de Adopción
+                        </button>
+                        <button type="button" id="cancelAdoption" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-green-500 to-blue-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-6xl block mb-4">💖</span>
+            <h1 class="text-4xl font-bold mb-4">Encuentra tu compañero perfecto</h1>
+            <p class="text-xl mb-6">Cada mascota tiene una historia única y está esperando escribir un nuevo capítulo contigo</p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">🔍 Filtrar mascotas</h2>
+            <div class="flex flex-wrap gap-3">
+                <button class="filter-btn active px-4 py-2 rounded-full text-white font-medium transition" data-filter="all">
+                    🐾 Todas
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-medium hover:bg-gray-300 transition" data-filter="perro">
+                    🐕 Perros
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-medium hover:bg-gray-300 transition" data-filter="gato">
+                    🐱 Gatos
+                </button>
+                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-full font-medium hover:bg-gray-300 transition" data-filter="otro">
+                    🐰 Otros
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de Mascotas -->
+        <div id="mascotasContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-12 text-gray-500">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <p class="text-lg">Cargando nuestros amigos disponibles...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+        let todasLasMascotas = [];
+        let filtroActual = 'all';
+
+        // Elementos del DOM
+        const mascotasContainer = document.getElementById('mascotasContainer');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const adoptionModal = document.getElementById('adoptionModal');
+        const adoptionForm = document.getElementById('adoptionForm');
+        const selectedPetInfo = document.getElementById('selectedPetInfo');
+        const selectedPetId = document.getElementById('selectedPetId');
+
+        // Cargar mascotas disponibles
+        async function cargarMascotasDisponibles() {
+            try {
+                const response = await fetch(`${API_BASE}/mascotas`);
+                if (!response.ok) throw new Error('Error al cargar mascotas');
+                
+                const mascotas = await response.json();
+                todasLasMascotas = mascotas.filter(m => m.estado === 'disponible');
+                
+                mostrarMascotas(todasLasMascotas);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mascotasContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-red-500">
+                        <span class="text-4xl block mb-4">😟</span>
+                        <p class="text-lg">Error al cargar las mascotas</p>
+                        <p class="text-sm mt-2">Por favor intenta de nuevo más tarde</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Mostrar mascotas
+        function mostrarMascotas(mascotas) {
+            if (mascotas.length === 0) {
+                mascotasContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-500">
+                        <span class="text-6xl block mb-4">🐾</span>
+                        <p class="text-xl mb-2">No hay mascotas disponibles en este momento</p>
+                        <p class="text-sm">Vuelve pronto para conocer nuevos amigos</p>
+                    </div>
+                `;
+                return;
+            }
+
+            mascotasContainer.innerHTML = mascotas.map(mascota => `
+                <div class="mascot-card bg-white rounded-xl shadow-lg overflow-hidden" data-especie="${mascota.especie}">
+                    <div class="relative">
+                        <div class="h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center overflow-hidden">
+                            ${
+                                mascota.imagen_url
+                                ? `<img src="${API_BASE}${mascota.imagen_url}" alt="${mascota.nombre}" class="object-cover h-full w-full">`
+                                : `<span class="text-6xl">${mascota.especie === 'perro' ? '🐕' : mascota.especie === 'gato' ? '🐱' : '🐾'}</span>`
+                            }
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                ✨ Disponible
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <h3 class="text-xl font-bold text-gray-800">${mascota.nombre}</h3>
+                            ${mascota.edad ? `<span class="text-gray-500 text-sm">${mascota.edad} años</span>` : ''}
+                        </div>
+                        <div class="flex items-center mb-3">
+                            <span class="text-blue-600 mr-2">🏷️</span>
+                            <span class="text-gray-600 capitalize">${mascota.especie}</span>
+                        </div>
+                        ${mascota.descripcion ? `
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">${mascota.descripcion}</p>
+                        ` : ''}
+                        <button onclick="abrirModalAdopcion(${mascota.id})" 
+                                class="w-full bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 px-4 rounded-lg hover:from-pink-600 hover:to-red-600 transition font-semibold flex items-center justify-center">
+                            <span class="mr-2">💖</span>
+                            ¡Quiero adoptarlo!
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filtros
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Actualizar botones activos
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                    btn.classList.remove('text-white');
+                });
+                
+                button.classList.add('active');
+                button.classList.remove('bg-gray-200', 'text-gray-700');
+                button.classList.add('text-white');
+                
+                // Filtrar mascotas
+                filtroActual = button.dataset.filter;
+                const mascotasFiltradas = filtroActual === 'all' ? 
+                    todasLasMascotas : 
+                    todasLasMascotas.filter(m => m.especie === filtroActual);
+                
+                mostrarMascotas(mascotasFiltradas);
+            });
+        });
+
+        // Modal de adopción
+        function abrirModalAdopcion(mascotaId) {
+            const mascota = todasLasMascotas.find(m => m.id === mascotaId);
+            if (!mascota) return;
+            
+            selectedPetId.value = mascotaId;
+            selectedPetInfo.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <span class="text-4xl">${mascota.especie === 'perro' ? '🐕' : mascota.especie === 'gato' ? '🐱' : '🐾'}</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">${mascota.nombre}</h3>
+                        <p class="text-gray-600">${mascota.especie}${mascota.edad ? ` • ${mascota.edad} años` : ''}</p>
+                    </div>
+                </div>
+            `;
+            
+            adoptionModal.classList.remove('hidden');
+        }
+
+        // Cerrar modal
+        document.getElementById('closeModal').addEventListener('click', () => {
+            adoptionModal.classList.add('hidden');
+        });
+
+        document.getElementById('cancelAdoption').addEventListener('click', () => {
+            adoptionModal.classList.add('hidden');
+        });
+
+        // Envío de solicitud de adopción
+        adoptionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(adoptionForm);
+            const solicitudData = Object.fromEntries(formData);
+            
+            console.log('Solicitud de adopción:', solicitudData);
+            
+            // Aquí integrarías con tu backend para procesar la solicitud
+            alert('¡Solicitud enviada exitosamente! Te contactaremos pronto para continuar con el proceso de adopción. 💖');
+            
+            adoptionModal.classList.add('hidden');
+            adoptionForm.reset();
+        });
+
+        // Cerrar modal al hacer click fuera
+        adoptionModal.addEventListener('click', (e) => {
+            if (e.target === adoptionModal) {
+                adoptionModal.classList.add('hidden');
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarMascotasDisponibles();
+        });
+    </script>
+</body>
+</html>

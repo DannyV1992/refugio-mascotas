@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio de Mascotas - Contacto y Colaboración</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .volunteer-card {
+            transition: all 0.3s ease;
+        }
+        .volunteer-card:hover {
+            transform: translateY(-5px);
+        }
+        .donation-progress {
+            background: linear-gradient(90deg, #10b981 var(--progress), #e5e7eb var(--progress));
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navegación -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🐾</span>
+                    <h1 class="text-xl font-bold text-gray-800">Refugio de Mascotas</h1>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Inicio</a>
+                    <a href="mascotas.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Ingresar Mascota</a>
+                    <a href="adopciones.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Adoptar</a>
+                    <a href="contacto.html" class="bg-blue-600 text-white px-3 py-2 rounded font-medium">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 z-50 transform translate-x-full transition-transform duration-300">
+        <div class="bg-white rounded-lg shadow-lg border-l-4 border-green-500 p-4 max-w-sm">
+            <div class="flex items-center">
+                <span id="toastIcon" class="mr-2">✅</span>
+                <p id="toastMessage" class="text-gray-800"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-6xl block mb-4">🤝</span>
+            <h1 class="text-4xl font-bold mb-4">Únete a nuestra misión</h1>
+            <p class="text-xl mb-6">Hay muchas formas de ayudar a las mascotas más allá de la adopción</p>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Formas de Colaborar -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">💝 Formas de Colaborar</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Voluntariado -->
+                <div class="volunteer-card bg-white rounded-xl shadow-lg p-6 text-center cursor-pointer" onclick="mostrarSeccion('voluntariado')">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-3xl">👥</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Voluntariado</h3>
+                    <p class="text-gray-600 text-sm">Ayuda con el cuidado diario de nuestros amigos</p>
+                </div>
+                <!-- Donaciones -->
+                <div class="volunteer-card bg-white rounded-xl shadow-lg p-6 text-center cursor-pointer" onclick="mostrarSeccion('donaciones')">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-3xl">💰</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Donaciones</h3>
+                    <p class="text-gray-600 text-sm">Contribuye con recursos para su cuidado</p>
+                </div>
+                <!-- Padrinos -->
+                <div class="volunteer-card bg-white rounded-xl shadow-lg p-6 text-center cursor-pointer" onclick="mostrarSeccion('padrinos')">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-3xl">💜</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Apadrinamiento</h3>
+                    <p class="text-gray-600 text-sm">Apoya a una mascota específica mensualmente</p>
+                </div>
+                <!-- Difusión -->
+                <div class="volunteer-card bg-white rounded-xl shadow-lg p-6 text-center cursor-pointer" onclick="mostrarSeccion('difusion')">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-3xl">📢</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Difusión</h3>
+                    <p class="text-gray-600 text-sm">Ayuda a compartir nuestro trabajo</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Formularios dinámicos -->
+            <div class="lg:col-span-2">
+                <!-- Sección Voluntariado -->
+                <div id="seccion-voluntariado" class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <span class="mr-2">👥</span>
+                        Únete como Voluntario
+                    </h2>
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">🕐 Horarios disponibles:</h3>
+                        <div class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800">Mañanas (8:00 - 12:00)</h4>
+                                <p class="text-gray-600">Alimentación, limpieza, paseos</p>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800">Tardes (14:00 - 18:00)</h4>
+                                <p class="text-gray-600">Socialización, juegos, cuidados</p>
+                            </div>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-purple-800">Fines de semana</h4>
+                                <p class="text-gray-600">Eventos, adopciones, actividades especiales</p>
+                            </div>
+                            <div class="bg-orange-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-orange-800">Remoto</h4>
+                                <p class="text-gray-600">Redes sociales, administración, fotografía</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="voluntarioForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre completo *</label>
+                                <input type="text" name="nombre" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono *</label>
+                                <input type="tel" name="telefono" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Áreas de interés *</label>
+                            <div class="grid md:grid-cols-2 gap-2">
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="cuidado_directo" class="mr-2"><span class="text-sm">Cuidado directo de animales</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="limpieza" class="mr-2"><span class="text-sm">Limpieza y mantenimiento</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="eventos" class="mr-2"><span class="text-sm">Organización de eventos</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="redes" class="mr-2"><span class="text-sm">Redes sociales y comunicación</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="transporte" class="mr-2"><span class="text-sm">Transporte de animales</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="areas" value="veterinario" class="mr-2"><span class="text-sm">Apoyo veterinario</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Disponibilidad horaria *</label>
+                            <select name="disponibilidad" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Seleccionar...</option>
+                                <option value="mañanas">Solo mañanas</option>
+                                <option value="tardes">Solo tardes</option>
+                                <option value="fines_semana">Solo fines de semana</option>
+                                <option value="flexible">Horario flexible</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Experiencia previa</label>
+                            <textarea name="experiencia" rows="3" placeholder="Cuéntanos sobre tu experiencia con animales o trabajo voluntario..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition font-semibold">
+                            💙 Quiero ser voluntario
+                        </button>
+                    </form>
+                </div>
+                <!-- Sección Donaciones -->
+                <div id="seccion-donaciones" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <span class="mr-2">💰</span>
+                        Hacer una Donación
+                    </h2>
+                    <form id="donacionForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de donación *</label>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="tipoDonacion" value="monetaria" class="mr-3" required>
+                                    <div>
+                                        <div class="font-medium">💵 Donación monetaria</div>
+                                        <div class="text-sm text-gray-600">Depósito bancario o transferencia</div>
+                                    </div>
+                                </label>
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="tipoDonacion" value="especie" class="mr-3" required>
+                                    <div>
+                                        <div class="font-medium">🥫 Donación en especie</div>
+                                        <div class="text-sm text-gray-600">Alimento, medicinas, juguetes</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="montoSection" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Monto a donar</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                                <button type="button" class="monto-btn py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50" data-monto="5000">₡5,000</button>
+                                <button type="button" class="monto-btn py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50" data-monto="10000">₡10,000</button>
+                                <button type="button" class="monto-btn py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50" data-monto="15000">₡15,000</button>
+                                <button type="button" class="monto-btn py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50" data-monto="otro">Otro</button>
+                            </div>
+                            <input type="number" id="montoCustom" placeholder="Ingresa el monto" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                        <div id="especieSection" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">¿Qué deseas donar?</label>
+                            <textarea name="descripcionEspecie" rows="3" placeholder="Describe qué vas a donar (alimento, medicinas, juguetes, etc.)" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"></textarea>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre *</label>
+                                <input type="text" name="nombreDonante" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono *</label>
+                                <input type="tel" name="telefonoDonante" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="emailDonante" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <p class="text-sm text-gray-500 mt-1">Para enviarte el recibo fiscal</p>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition font-semibold">
+                            💝 Confirmar Donación
+                        </button>
+                    </form>
+                </div>
+                <!-- Sección Apadrinamiento -->
+                <div id="seccion-padrinos" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <span class="mr-2">💜</span>
+                        Programa de Apadrinamiento
+                    </h2>
+                    <form id="padrinoForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre completo *</label>
+                                <input type="text" name="nombrePadrino" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono *</label>
+                                <input type="tel" name="telefonoPadrino" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                            <input type="email" name="emailPadrino" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preferencia de mascota</label>
+                            <select name="preferenciaEspecie" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                <option value="">Sin preferencia</option>
+                                <option value="perro">Perros</option>
+                                <option value="gato">Gatos</option>
+                                <option value="mayor">Animales mayores</option>
+                                <option value="especiales">Necesidades especiales</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Aportación mensual *</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="aportacion" value="3000" class="mr-2" required>
+                                    <span class="text-sm">₡3000/mes</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="aportacion" value="5000" class="mr-2" required>
+                                    <span class="text-sm">₡5000/mes</span>
+                                </label>
+                                <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="aportacion" value="10000" class="mr-2" required>
+                                    <span class="text-sm">₡10000/mes</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-6 rounded-lg hover:from-purple-600 hover:to-purple-700 transition font-semibold">
+                            💜 Quiero ser padrino/madrina
+                        </button>
+                    </form>
+                </div>
+                <!-- Sección Difusión -->
+                <div id="seccion-difusion" class="bg-white rounded-xl shadow-lg p-8 mb-8 hidden">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
+                        <span class="mr-2">📢</span>
+                        Ayuda con la Difusión
+                    </h2>
+                    <form id="difusionForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre *</label>
+                                <input type="text" name="nombreDifusor" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                <input type="email" name="emailDifusor" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">¿Cómo quieres ayudar? *</label>
+                            <div class="space-y-2">
+                                <label class="flex items-center"><input type="checkbox" name="tiposDifusion" value="redes_sociales" class="mr-2"><span class="text-sm">Compartir en redes sociales</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="tiposDifusion" value="volantes" class="mr-2"><span class="text-sm">Distribuir volantes</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="tiposDifusion" value="eventos" class="mr-2"><span class="text-sm">Organizar eventos</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="tiposDifusion" value="charlas" class="mr-2"><span class="text-sm">Dar charlas educativas</span></label>
+                                <label class="flex items-center"><input type="checkbox" name="tiposDifusion" value="fotografia" class="mr-2"><span class="text-sm">Fotografía de mascotas</span></label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Redes sociales donde tienes presencia</label>
+                            <input type="text" name="redesSociales" placeholder="Ej: Instagram @miusuario, Facebook, TikTok..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-6 rounded-lg hover:from-orange-600 hover:to-orange-700 transition font-semibold">
+                            📢 Quiero ayudar con la difusión
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- Panel Lateral - Información de contacto -->
+            <div class="space-y-6">
+                <!-- Información de Contacto -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">📍</span>
+                        Información de Contacto
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-blue-600 mt-1">🏠</span>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Dirección</h4>
+                                <p class="text-gray-600 text-sm">Calle de los Animales #123<br>Colonia Pet Friendly, Ciudad</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-blue-600 mt-1">📞</span>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Teléfono</h4>
+                                <p class="text-gray-600 text-sm">4545-5687</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-blue-600 mt-1">✉️</span>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Email</h4>
+                                <p class="text-gray-600 text-sm">contacto@refugiomascotas.org</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-blue-600 mt-1">⏰</span>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Horarios</h4>
+                                <p class="text-gray-600 text-sm">
+                                    Lun-Vie: 9:00 AM - 6:00 PM<br>
+                                    Sáb: 9:00 AM - 4:00 PM<br>
+                                    Dom: 10:00 AM - 2:00 PM
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Redes Sociales -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🌐</span>
+                        Síguenos
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <a href="#" class="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
+                            <span class="text-blue-600 mr-3 text-xl">📘</span>
+                            <span class="text-gray-800 font-medium">Facebook</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">
+                            <span class="text-pink-600 mr-3 text-xl">📷</span>
+                            <span class="text-gray-800 font-medium">Instagram</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
+                            <span class="text-blue-500 mr-3 text-xl">🐦</span>
+                            <span class="text-gray-800 font-medium">Twitter</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">
+                            <span class="text-red-600 mr-3 text-xl">📺</span>
+                            <span class="text-gray-800 font-medium">YouTube</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Datos bancarios -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🏦</span>
+                        Datos Bancarios
+                    </h3>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <span class="font-medium text-gray-800">Banco:</span>
+                            <p class="text-gray-600">BCR</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-800">Cuenta:</span>
+                            <p class="text-gray-600">1234567890123456</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-800">SINPE:</span>
+                            <p class="text-gray-600">7785-5624</p>
+                        </div>
+                        <div>
+                            <span class="font-medium text-gray-800">Beneficiario:</span>
+                            <p class="text-gray-600">Refugio de Mascotas A.C.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    // Función para mostrar toast notifications
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastMessage = document.getElementById('toastMessage');
+        const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        const colors = { success: 'border-green-500', error: 'border-red-500', info: 'border-blue-500' };
+        toastIcon.textContent = icons[type];
+        toastMessage.textContent = message;
+        toast.firstElementChild.className = `bg-white rounded-lg shadow-lg border-l-4 ${colors[type]} p-4 max-w-sm`;
+        toast.classList.remove('translate-x-full');
+        toast.classList.add('translate-x-0');
+        setTimeout(() => {
+            toast.classList.remove('translate-x-0');
+            toast.classList.add('translate-x-full');
+        }, 3000);
+    }
+
+    function mostrarSeccion(seccion) {
+        document.querySelectorAll('[id^="seccion-"]').forEach(el => {
+            el.classList.add('hidden');
+        });
+        document.getElementById(`seccion-${seccion}`).classList.remove('hidden');
+    }
+
+    // Mostrar/ocultar campos DONACIÓN
+    document.querySelectorAll('input[name="tipoDonacion"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const montoSection = document.getElementById('montoSection');
+            const especieSection = document.getElementById('especieSection');
+            if (this.value === 'monetaria') {
+                montoSection.classList.remove('hidden');
+                especieSection.classList.add('hidden');
+            } else {
+                montoSection.classList.add('hidden');
+                especieSection.classList.remove('hidden');
+            }
+        });
+    });
+
+    document.querySelectorAll('.monto-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const monto = this.dataset.monto;
+            const customInput = document.getElementById('montoCustom');
+            document.querySelectorAll('.monto-btn').forEach(b => {
+                b.classList.remove('bg-green-500', 'text-white');
+                b.classList.add('border-gray-300');
+            });
+            this.classList.add('bg-green-500', 'text-white');
+            this.classList.remove('border-gray-300');
+            if (monto !== 'otro') {
+                customInput.value = monto;
+                customInput.disabled = true;
+            } else {
+                customInput.disabled = false;
+                customInput.focus();
+            }
+        });
+    });
+
+    // VOLUNTARIADO
+    document.getElementById('voluntarioForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = {
+            nombre: formData.get("nombre"),
+            telefono: formData.get("telefono"),
+            email: formData.get("email"),
+            areas: Array.from(this.querySelectorAll('input[name="areas"]:checked')).map(cb => cb.value),
+            disponibilidad: formData.get("disponibilidad"),
+            experiencia: formData.get("experiencia")
+        };
+        try {
+            const resp = await fetch("http://localhost:8001/solicitudes-voluntariado", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+            if (!resp.ok) throw new Error("No registrado");
+            showToast('¡Solicitud de voluntariado enviada! Te contactaremos pronto para coordinar una entrevista. 👥');
+            this.reset();
+        } catch (error) {
+            showToast('Error al registrar solicitud, intenta más tarde.', 'error');
+        }
+    });
+
+    // DONACIONES
+    document.getElementById('donacionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const tipoDonacion = formData.get("tipoDonacion");
+        let monto = null;
+        let descripcionEspecie = null;
+        if (tipoDonacion === "monetaria") {
+            monto = parseFloat(document.getElementById('montoCustom').value || 0) || null;
+        } else {
+            descripcionEspecie = formData.get("descripcionEspecie");
+        }
+        const data = {
+            tipo_donacion: tipoDonacion,
+            monto,
+            descripcion_especie: descripcionEspecie,
+            nombre_donante: formData.get("nombreDonante"),
+            telefono_donante: formData.get("telefonoDonante"),
+            email_donante: formData.get("emailDonante") || undefined
+        };
+        try {
+            const resp = await fetch("http://localhost:8001/donaciones", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+            if (!resp.ok) throw new Error("No registrado");
+            showToast('¡Gracias por tu generosidad! Te enviaremos los datos para completar tu donación. 💝');
+            this.reset();
+        } catch (error) {
+            showToast('Error al registrar donación, intenta más tarde.', 'error');
+        }
+    });
+
+    // APADRINAMIENTO
+    document.getElementById('padrinoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = {
+            nombre_padrino: formData.get("nombrePadrino"),
+            telefono_padrino: formData.get("telefonoPadrino"),
+            email_padrino: formData.get("emailPadrino"),
+            preferencia_especie: formData.get("preferenciaEspecie") || "",
+            aportacion_mensual: parseFloat(formData.get("aportacion")) || 0
+        };
+        try {
+            const resp = await fetch("http://localhost:8001/apadrinamientos", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+            if (!resp.ok) throw new Error("No registrado");
+            showToast('¡Solicitud de apadrinamiento recibida! Te contactaremos para presentarte a tu nuevo ahijado/a. 💜');
+            this.reset();
+        } catch (error) {
+            showToast('Error al registrar apadrinamiento, intenta más tarde.', 'error');
+        }
+    });
+
+    // DIFUSIÓN
+    document.getElementById('difusionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const tiposDifusion = Array.from(this.querySelectorAll('input[name="tiposDifusion"]:checked')).map(cb => cb.value);
+        const data = {
+            nombre: formData.get("nombreDifusor"),
+            email: formData.get("emailDifusor"),
+            tipos_difusion: tiposDifusion,
+            redes_sociales: formData.get("redesSociales") || ""
+        };
+        try {
+            const resp = await fetch("http://localhost:8001/colaboradores-difusion", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+            if (!resp.ok) throw new Error("No registrado");
+            showToast('¡Gracias por ayudarnos a difundir! Te enviaremos material para compartir. 📢');
+            this.reset();
+        } catch (error) {
+            showToast('Error al registrar colaboración de difusión, intenta más tarde.', 'error');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        mostrarSeccion('voluntariado');
+    });
+    </script>
+</body>
+</html>

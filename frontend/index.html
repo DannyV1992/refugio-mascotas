@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refugio de Mascotas - Donde los corazones se encuentran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #764ba2 90%);
+            position: relative;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.35;
+            z-index: 0;
+        }
+        .hero-bg > * {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Navegación -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🐾</span>
+                    <h1 class="text-xl font-bold text-gray-800">Refugio de Mascotas</h1>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="bg-blue-600 text-white px-3 py-2 rounded font-medium">Inicio</a>
+                    <a href="mascotas.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Ingresar Mascota</a>
+                    <a href="adopciones.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Adoptar</a>
+                    <a href="contacto.html" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section con degradado, imagen y superposición -->
+    <section class="hero-bg relative overflow-hidden text-white z-10">
+        <div class="max-w-7xl mx-auto px-4 py-20 text-center relative z-10">
+            <span class="text-8xl block mb-6">🏠</span>
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+                Donde los <span class="text-yellow-300">corazones</span> se encuentran
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-xl mx-auto drop-shadow">
+                Cada cola que mueve, cada ronroneo, cada mirada... <br>
+                Hay una historia de amor esperando por ti
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+                <a href="adopciones.html" 
+                   class="bg-yellow-400 text-gray-800 px-8 py-4 rounded-full hover:bg-yellow-300 transition font-bold text-lg transform hover:scale-105 shadow-lg z-10">
+                    💖 Encuentra tu compañero
+                </a>
+                <a href="mascotas.html" 
+                   class="bg-white bg-opacity-70 text-blue-800 px-8 py-4 rounded-full hover:bg-blue-100 transition font-bold text-lg transform hover:scale-105 z-10">
+                    🐾 Ver nuestros amigos
+                </a>
+            </div>
+        </div>
+        <!-- Overlay para oscurecer y dar contraste, con z-0 -->
+        <div class="absolute inset-0 bg-black bg-opacity-30 z-0"></div>
+    </section>
+
+    <!-- Historia/Valores -->
+    <section class="py-14 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-blue-700 mb-6">
+                        Más que un refugio, <span class="text-indigo-600">somos una familia</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Desde 2010, hemos sido hogar temporal de más de 2,000 mascotas.<br>
+                        Cada animal que llega recibe amor, atención y oportunidad de encontrar una familia que lo ame.
+                    </p>
+                    <ul class="list-disc list-inside text-blue-800 mb-6">
+                        <li>Cuidado y respeto por los animales</li>
+                        <li>Compromiso con la adopción responsable</li>
+                        <li>Transparencia y educación</li>
+                    </ul>
+                </div>
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 text-center text-white transform rotate-3 hover:rotate-0 transition duration-500 drop-shadow-xl">
+                        <span class="text-6xl block mb-4">🏆</span>
+                        <h3 class="text-2xl font-bold mb-2">Premio Nacional</h3>
+                        <p>Mejor Refugio 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action creativo -->
+    <section class="py-14 bg-gradient-to-r from-green-400 to-blue-500 text-white">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-6xl block mb-4">❤️</span>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                ¡Tu nuevo mejor amigo te está esperando!
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white bg-opacity-20 rounded-xl p-6 transform hover:scale-105 transition">
+                    <span class="text-4xl block mb-4">🔍</span>
+                    <h3 class="text-xl font-bold mb-2">Ingresa una mascota</h3>
+                    <p class="text-sm mb-3">Ayuda a que una mascota encuentre un hogar</p>
+                    <a href="mascotas.html" class="inline-block mt-2 bg-white text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">Ver mascotas</a>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-xl p-6 transform hover:scale-105 transition">
+                    <span class="text-4xl block mb-4">💕</span>
+                    <h3 class="text-xl font-bold mb-2">Adopta</h3>
+                    <p class="text-sm mb-3">Conoce nuestro sencillo proceso</p>
+                    <a href="adopciones.html" class="inline-block mt-2 bg-white text-green-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">Proceso adopción</a>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-xl p-6 transform hover:scale-105 transition">
+                    <span class="text-4xl block mb-4">🤝</span>
+                    <h3 class="text-xl font-bold mb-2">Ayuda</h3>
+                    <p class="text-sm mb-3">Colabora con nosotros</p>
+                    <a href="contacto.html" class="inline-block mt-2 bg-white text-purple-700 px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition">Contáctanos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATOS CURIOSOS (extraidos de API) -->
+    <section class="py-10 bg-gray-50 border-t border-gray-200 mt-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">Datos Curiosos</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Razas de perros -->
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🐕</span>
+                        Razas de Perros Populares
+                    </h3>
+                    <div id="dogBreeds" class="text-gray-600">Cargando...</div>
+                </div>
+                <!-- Dato curioso gato -->
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <span class="mr-2">🐱</span>
+                        Dato curioso sobre gatos
+                    </h3>
+                    <div id="catFact" class="text-gray-600 italic">Cargando...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-8 mt-10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-2xl mr-2">🐾</span>
+            Refugio de Mascotas — 2025
+        </div>
+    </footer>
+
+    <!-- Script API datos curiosos -->
+    <script>
+    // Consumir API externa para razas y datos de gatos
+    const API_BASE = 'http://localhost:8001';
+
+    async function cargarDatosExternos() {
+        try {
+            const response = await fetch(`${API_BASE}/api/external-pet-data`);
+            const data = await response.json();
+            document.getElementById('dogBreeds').innerHTML =
+                `<div class="flex flex-wrap gap-2">${data.dog_breeds.slice(0, 8).map(breed =>
+                `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">${breed}</span>`
+                ).join('')}</div>`;
+            document.getElementById('catFact').textContent = `"${data.cat_fact}"`;
+        } catch (error) {
+            document.getElementById('dogBreeds').textContent = 'Error al cargar datos';
+            document.getElementById('catFact').textContent = 'Error al cargar datos';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', cargarDatosExternos);
+    </script>
+</body>
+</html>
