@@ -18,7 +18,7 @@ class EstadoEnum(str, Enum):
     adoptado = "adoptado"
 
 class TamañoEnum(str, Enum):
-    pequeño = "pequeño"
+    pequeño = "pequeno"
     mediano = "mediano"
     grande = "grande"
 

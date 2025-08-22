@@ -81,13 +81,12 @@ removeImageBtn.addEventListener('click', (e) => {
     previewContainer.classList.add('hidden');
 });
 
-// Envío del formulario (implementando el "test que funciona")
+// Envío del formulario
 mascotaForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(mascotaForm);
     let imagen_url = null;
 
-    // --- CLAVE: SOLO INTENTA LA SUBIDA SI HAY ARCHIVO! ---
     if (imagenInput.files.length > 0) {
         const imgFormData = new FormData();
         imgFormData.append("file", imagenInput.files[0]);
@@ -124,14 +123,25 @@ mascotaForm.addEventListener('submit', async (e) => {
     try {
         submitBtn.disabled = true;
         submitText.textContent = 'Registrando...';
+        
         const url = editingMascotaId ? `${API_BASE}/mascotas/${editingMascotaId}` : `${API_BASE}/mascotas`;
         const method = editingMascotaId ? 'PUT' : 'POST';
+        
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(mascotaData)
         });
-        if (!response.ok) throw new Error('Error en el servidor');
+
+        // Capturar mensajes de error específicos
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.detail || 'Error desconocido';
+            showToast(errorMessage, 'error');
+            return; // Salir sin continuar
+        }
+
+        // Si llegamos aquí, todo salió bien
         showToast(
             editingMascotaId ?
             '¡Información de la mascota actualizada!' :
@@ -139,14 +149,16 @@ mascotaForm.addEventListener('submit', async (e) => {
         );
         resetForm();
         cargarMascotasRecientes();
+        
     } catch (error) {
         console.error('Error:', error);
-        showToast('Error al registrar la mascota. Por favor intenta de nuevo.', 'error');
+        showToast('Error de conexión. Por favor intenta de nuevo.', 'error');
     } finally {
         submitBtn.disabled = false;
         submitText.textContent = 'Registrar en el Refugio';
     }
 });
+
 function resetForm() {
     mascotaForm.reset();
     selectedImage = null;

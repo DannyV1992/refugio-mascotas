@@ -3,18 +3,21 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+*.pyc
 
 # Virtual Environment
 venv/
 env/
 .venv/
-.env
 ENV/
 env.bak/
 venv.bak/
 
-# FastAPI específico
+# Environment files
 .env
+backend/.env
+
+# FastAPI específico
 *.log
 
 # IDE y editores
@@ -62,18 +65,16 @@ coverage.xml
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
 # Node modules (si usas npm para frontend tools)
 node_modules/
 
 # Archivos temporales
 *.tmp
 *.temp
+
+# Bases de datos locales
+*.db
+*.sqlite
+
+# Docker volumes (datos persistentes)
+mysql_data/

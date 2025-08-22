@@ -1,0 +1,6 @@
+Pruebas de datos validos:
+
+- Teléfono inválido: 12345 → Verás: "Formato de teléfono inválido (use formato costarricense: +506 8888 1122 o 8888-1122)"
+- Edad inválida: -5 → Verás: "La edad debe estar entre 0 y 30 años"
+- Nombre vacío: Solo espacios → Verás: "El nombre es obligatorio"
+- Datos válidos: Teléfono 8888-1122 → Verás: "¡Mascota registrada exitosamente!"

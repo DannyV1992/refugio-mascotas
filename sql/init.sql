@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS mascotas (
     edad INT DEFAULT NULL,
     descripcion TEXT,
     imagen_url VARCHAR(500) DEFAULT NULL,
-    tamaño ENUM('pequeño', 'mediano', 'grande') DEFAULT NULL,
+    tamano ENUM('pequeno', 'mediano', 'grande') DEFAULT NULL,
     genero ENUM('macho', 'hembra') DEFAULT NULL,
     contacto_nombre VARCHAR(100) DEFAULT NULL,
     contacto_telefono VARCHAR(20) DEFAULT NULL,
@@ -113,12 +113,12 @@ CREATE TABLE IF NOT EXISTS colaboradores_difusion (
 -- Mascotas disponibles
 INSERT INTO mascotas (nombre, especie, edad, descripcion, imagen_url, tamaño, genero, contacto_nombre, contacto_telefono, estado) VALUES
 ('Max', 'perro', 3, 'Perro muy amigable y juguetón. Le encanta correr en el parque y jugar con niños.', '/uploads/max.jpg', 'mediano', 'macho', 'Ana González', '+506 8888 1122', 'disponible'),
-('Luna', 'gato', 2, 'Gata tranquila y cariñosa. Perfecta para apartamentos, muy independiente.', '/uploads/luna.jpg', 'pequeño', 'hembra', 'Javier Ramírez', '+506 8765 4321', 'disponible'),
+('Luna', 'gato', 2, 'Gata tranquila y cariñosa. Perfecta para apartamentos, muy independiente.', '/uploads/luna.jpg', 'pequeno', 'hembra', 'Javier Ramírez', '+506 8765 4321', 'disponible'),
 ('Rocky', 'perro', 5, 'Perro guardián muy leal. Necesita espacio para correr y una familia activa.', '/uploads/rocky.jpg', 'grande', 'macho', 'Equipo del Refugio', '+506 2244 5566', 'disponible'),
-('Mia', 'gato', 1, 'Gatita muy activa y curiosa. Le gusta jugar con pelotas y trepar.', '/uploads/mia.jpg', 'pequeño', 'hembra', 'Equipo del Refugio', '+506 2244 5566', 'adoptado'),
+('Mia', 'gato', 1, 'Gatita muy activa y curiosa. Le gusta jugar con pelotas y trepar.', '/uploads/mia.jpg', 'pequeno', 'hembra', 'Equipo del Refugio', '+506 2244 5566', 'adoptado'),
 ('Buddy', 'perro', 7, 'Perro mayor, muy tranquilo y obediente. Ideal para personas mayores.', '/uploads/buddy.jpg', 'mediano', 'macho', 'Luis Fernández', '+506 8567 2345', 'disponible'),
 ('Whiskers', 'gato', 4, 'Gato muy sociable, le encanta la compañía humana. Perfecto para familias.', '/uploads/whiskers.jpg', 'mediano', 'macho', 'Equipo del Refugio', '+506 2244 5566', 'disponible'),
-('Bella', 'perro', 2, 'Perra muy energética y cariñosa. Le encanta jugar y pasear.', '/uploads/bella.jpg', 'pequeño', 'hembra', 'Iván Ureña', '+506 6001 2233', 'disponible');
+('Bella', 'perro', 2, 'Perra muy energética y cariñosa. Le encanta jugar y pasear.', '/uploads/bella.jpg', 'pequeno', 'hembra', 'Iván Ureña', '+506 6001 2233', 'disponible');
 
 -- Solicitudes de adopción ejemplo
 INSERT INTO solicitudes_adopcion (mascota_id, nombre, telefono, email, direccion, tipo_vivienda, otras_mascotas, experiencia, motivacion, horas_disponibles, presupuesto, estado) VALUES

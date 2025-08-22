@@ -29,10 +29,11 @@ refugio-mascotas/
 │   ├── models.py
 │   ├── requirements.txt
 │   ├── uploads/ # Carpeta para imágenes
-│   └── .env (no subir, usa .env.example)
+│   └── .env (usar .env.example y renombrarlo)
 ├── pipeline/
 │   ├── flows.py
-│   ├── logs/
+│   ├── reports/
+|   ├── logs/
 │   └── backups/
 ├── sql/
 │   └── init.sql
@@ -70,7 +71,7 @@ Instala dependencias
 ```
 pip install -r requirements.txt
 ```
-Copia y edita .env.example a .env con tus credenciales MySQL
+Renombra .env.example a .env y agrega tus credenciales de MySQL
 ```
 cp .env.example .env
 ```
@@ -114,16 +115,48 @@ o usa cualquier servidor estático a tu preferencia
 
 ---
 
-## 🛠️ Pipeline de Calidad & Backups
+## 🤖 Pipeline de datos
 
-- Ejecuta manualmente en `/pipeline`:
+Pipeline automatizado para limpieza, análisis y respaldo de datos del refugio.
+
+### ✨ Características del pipeline
+
+- **Limpieza de datos**: Valida y normaliza información de mascotas
+- **Análisis de tendencias**: Genera insights sobre adopciones y popularidad
+- **Backups automáticos**: Respaldos organizados por fecha de todas las tablas
+- **Reportes diarios**: Estadísticas y alertas del refugio
+- **Sistema de alertas**: Notifica sobre solicitudes pendientes y datos incompletos
+
+### 🚀 Ejecución
+
+#### Ejecución manual
 
 ```
 cd pipeline
 python flows.py
 ```
 
-- Limpia, valida y respalda datos en `/pipeline/backups/` y logs en `/pipeline/logs/`
+#### Ejecución programada (automática)
+
+```
+cd pipeline
+python flows.py --schedule
+```
+Se ejecuta diariamente a las 2:00 AM
+
+### 📁 Archivos generados
+
+- **`backups/`**: Respaldos CSV organizados por fecha
+- **`reports/`**: Reportes diarios en JSON con estadísticas y alertas
+- **`logs/`**: Logs de ejecución con métricas de calidad
+
+### 📊 Reportes incluyen
+
+- Total de mascotas y disponibilidad
+- Solicitudes de adopción pendientes
+- Voluntarios activos y donaciones mensuales
+- Especies más populares y tendencias de adopción
+- Alertas automáticas (solicitudes viejas, mascotas sin foto, donaciones pendientes)
 
 ---
 

@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: refugio_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: refugio_mascotas
+      MYSQL_USER: refugio_user
+      MYSQL_PASSWORD: refugio_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - refugio_network
+
+  backend:
+    build: .
+    container_name: refugio_backend
+    environment:
+      - DB_HOST=db
+      - DB_NAME=refugio_mascotas
+      - DB_USER=refugio_user
+      - DB_PASSWORD=refugio_pass
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+    volumes:
+      - ./backend/uploads:/app/uploads
+    networks:
+      - refugio_network
+
+  frontend:
+    image: nginx:alpine
+    container_name: refugio_frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - refugio_network
+
+volumes:
+  mysql_data:
+
+networks:
+  refugio_network:
+    driver: bridge

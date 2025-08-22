@@ -5,3 +5,7 @@ httpx==0.25.2
 pydantic==2.5.0
 python-multipart==0.0.6
 pandas==2.1.4
+schedule
+pathlib2
+bleach==6.0.0
+html5lib==1.1
