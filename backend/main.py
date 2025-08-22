@@ -39,11 +39,11 @@ app.add_middleware(
 )
 
 # Crear directorio para imágenes
-UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR = Path(__file__).parent / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Montar directorio de archivos estáticos
-app.mount("/backend/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # Configuración de BD
 DB_CONFIG = {
