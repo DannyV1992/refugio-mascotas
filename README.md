@@ -23,6 +23,8 @@ Proyecto full‑stack para administración, adopción y colaboración en un refu
 ## 📁 Estructura del proyecto
 ```
 refugio-mascotas/
+│ └── workflows/
+│   └── deploy.yml # CI/CD GitHub Actions
 ├── backend/
 │   ├── main.py
 │   ├── database.py
@@ -41,14 +43,37 @@ refugio-mascotas/
 │   ├── index.html # Página Home
 │   ├── mascotas.html # Registrar mascotas
 │   ├── adopciones.html # Solicitar adopción
-│   ├── contacto.html # Colabora & contacto
+│   ├── contacto.html # Colaboración y contacto
 │   └── app.js # Lógica frontend
+├── docker-compose.yml
+├── Dockerfile
 └── README.md
 ```
 
-## 🚀 Instalación rápida
+## 🚀 Instalación y ejecución
 
-#### **1. Base de Datos**
+### **Opción 1: Con Docker (recomendado)**
+
+Clona el repositorio
+```
+git clone [tu-repositorio-url]
+cd refugio-mascotas
+```
+
+Levanta toda la aplicación con Docker
+```
+docker-compose up --build
+```
+
+Accede a los servicios:
+Frontend: http://localhost:8080
+Backend API: http://localhost:8001
+Documentación API: http://localhost:8001/docs
+
+
+### **Opción 2: Instalación manual**
+
+#### **1. Base de datos**
 
 - Debes tener instalado **MySQL 8.x**
 - Ejecuta el script para crear y poblar la base:
@@ -71,7 +96,7 @@ Instala dependencias
 ```
 pip install -r requirements.txt
 ```
-Renombra .env.example a .env y agrega tus credenciales de MySQL
+Renombra .env.example por .env y agrega tus credenciales de MySQL
 ```
 cp .env.example .env
 ```
@@ -160,6 +185,28 @@ Se ejecuta diariamente a las 2:00 AM
 
 ---
 
+## 🐳 DevOps y despliegue
+
+### **Docker**
+- **Dockerfile**: containeriza el backend FastAPI
+- **docker-compose.yml**: orquesta backend, frontend (Nginx) y base de datos MySQL
+- **Volumes**: persistencia de datos de MySQL y uploads
+- **Networks**: comunicación interna entre contenedores
+
+### **CI/CD con GitHub Actions**
+- **Pruebas automáticas**: validación de imports y dependencias
+- **Build testing**: construcción y prueba de contenedores Docker
+- **Deploy ready**: preparado para despliegue en Digital Ocean
+- **Trigger**: se ejecuta automáticamente en cada push a `main`
+
+### **Seguridad**
+- **Sanitización XSS**: limpieza automática de inputs maliciosos
+- **Validación de datos**: teléfonos, emails, rangos de edad
+- **Manejo de archivos**: validación de tipos y tamaños de imagen
+- **Variables de entorno**: credenciales protegidas
+
+---
+
 ## 💡 Personalización y extensión
 
 - Todos los formularios, modelos y rutas son extensibles
@@ -168,13 +215,28 @@ Se ejecuta diariamente a las 2:00 AM
 
 ---
 
-## 👩‍💻 Créditos y frameworks
+## 👩‍💻 Tecnologías utilizadas
 
-- **Tailwind CSS**: CSS framework utility-first
-- **FastAPI**: API en Python super rápida
-- **MySQL**: Base de datos robusta
-- **Pandas**: Procesamiento de datos para backups/logs
-- **Dog CEO API/Cat Facts API**: Para datos curiosos
+### **Backend**
+- **FastAPI**: Framework web moderno y rápido
+- **MySQL**: Base de datos relacional robusta
+- **Pydantic**: Validación y serialización de datos
+- **Uvicorn**: Servidor ASGI para producción
+
+### **Frontend**
+- **HTML5 semántico**: Estructura moderna
+- **Tailwind CSS**: Framework utility-first para diseño
+- **JavaScript ES6+**: Interactividad y llamadas a API
+- **Fetch API**: Comunicación asíncrona con backend
+
+### **DevOps**
+- **Docker**: Containerización y portabilidad
+- **GitHub Actions**: CI/CD automatizado
+- **Nginx**: Servidor web para frontend en producción
+
+### **Procesamiento de datos**
+- **Pandas**: Análisis y limpieza de datos
+- **Dog CEO API/Cat Facts API**: Datos externos curiosos
 
 ---
 
@@ -183,4 +245,5 @@ Se ejecuta diariamente a las 2:00 AM
 - Daniel Vásquez González
 - Susana Herrera Fonseca
 - Kendra Gutiérrez Vega
+
 ---
