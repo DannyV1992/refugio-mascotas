@@ -1,4 +1,3 @@
-DROP SCHEMA IF EXISTS refugio_mascotas;
 -- Crear base de datos
 CREATE DATABASE IF NOT EXISTS refugio_mascotas;
 USE refugio_mascotas;
@@ -57,7 +56,7 @@ CREATE TABLE IF NOT EXISTS solicitudes_voluntariado (
     telefono VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL,
     areas TEXT NOT NULL,
-    disponibilidad ENUM('mañanas', 'tardes', 'fines_semana', 'flexible') NOT NULL,
+    disponibilidad ENUM('mananas', 'tardes', 'fines_semana', 'flexible') NOT NULL,
     experiencia TEXT DEFAULT NULL,
     estado ENUM('pendiente', 'revisando', 'aprobado', 'rechazado') DEFAULT 'pendiente',
     notas_admin TEXT DEFAULT NULL,
@@ -111,24 +110,24 @@ CREATE TABLE IF NOT EXISTS colaboradores_difusion (
 );
 
 -- Mascotas disponibles
-INSERT INTO mascotas (nombre, especie, edad, descripcion, imagen_url, tamaño, genero, contacto_nombre, contacto_telefono, estado) VALUES
-('Max', 'perro', 3, 'Perro muy amigable y juguetón. Le encanta correr en el parque y jugar con niños.', '/uploads/max.jpg', 'mediano', 'macho', 'Ana González', '+506 8888 1122', 'disponible'),
-('Luna', 'gato', 2, 'Gata tranquila y cariñosa. Perfecta para apartamentos, muy independiente.', '/uploads/luna.jpg', 'pequeno', 'hembra', 'Javier Ramírez', '+506 8765 4321', 'disponible'),
+INSERT INTO mascotas (nombre, especie, edad, descripcion, imagen_url, tamano, genero, contacto_nombre, contacto_telefono, estado) VALUES
+('Max', 'perro', 3, 'Perro muy amigable y juguetón. Le encanta correr en el parque y jugar con ninos.', '/uploads/max.jpg', 'mediano', 'macho', 'Ana González', '+506 8888 1122', 'disponible'),
+('Luna', 'gato', 2, 'Gata tranquila y carinosa. Perfecta para apartamentos, muy independiente.', '/uploads/luna.jpg', 'pequeno', 'hembra', 'Javier Ramírez', '+506 8765 4321', 'disponible'),
 ('Rocky', 'perro', 5, 'Perro guardián muy leal. Necesita espacio para correr y una familia activa.', '/uploads/rocky.jpg', 'grande', 'macho', 'Equipo del Refugio', '+506 2244 5566', 'disponible'),
 ('Mia', 'gato', 1, 'Gatita muy activa y curiosa. Le gusta jugar con pelotas y trepar.', '/uploads/mia.jpg', 'pequeno', 'hembra', 'Equipo del Refugio', '+506 2244 5566', 'adoptado'),
 ('Buddy', 'perro', 7, 'Perro mayor, muy tranquilo y obediente. Ideal para personas mayores.', '/uploads/buddy.jpg', 'mediano', 'macho', 'Luis Fernández', '+506 8567 2345', 'disponible'),
-('Whiskers', 'gato', 4, 'Gato muy sociable, le encanta la compañía humana. Perfecto para familias.', '/uploads/whiskers.jpg', 'mediano', 'macho', 'Equipo del Refugio', '+506 2244 5566', 'disponible'),
-('Bella', 'perro', 2, 'Perra muy energética y cariñosa. Le encanta jugar y pasear.', '/uploads/bella.jpg', 'pequeno', 'hembra', 'Iván Ureña', '+506 6001 2233', 'disponible');
+('Whiskers', 'gato', 4, 'Gato muy sociable, le encanta la companía humana. Perfecto para familias.', '/uploads/whiskers.jpg', 'mediano', 'macho', 'Equipo del Refugio', '+506 2244 5566', 'disponible'),
+('Bella', 'perro', 2, 'Perra muy energética y carinosa. Le encanta jugar y pasear.', '/uploads/bella.jpg', 'pequeno', 'hembra', 'Iván Urena', '+506 6001 2233', 'disponible');
 
 -- Solicitudes de adopción ejemplo
 INSERT INTO solicitudes_adopcion (mascota_id, nombre, telefono, email, direccion, tipo_vivienda, otras_mascotas, experiencia, motivacion, horas_disponibles, presupuesto, estado) VALUES
 (1, 'Laura Campos', '+506 8700 1122', 'laura.campos@correo.cr', 'Del ICE 100 metros norte, San José', 'casa_jardin', 'no', 'moderada', 'Toby sería perfecto para mi familia, tenemos espacio y tiempo para él.', '6-8', '1000-3000', 'pendiente'),
-(2, 'José Murillo', '+506 7000 2233', 'jose.murillo@correo.cr', 'Frente a la Plaza de Deportes, Cartago', 'apartamento', 'no', 'poca', 'Deseo compañía felina tranquila y Nina es ideal.', '4-6', '1000-3000', 'revisando'),
+(2, 'José Murillo', '+506 7000 2233', 'jose.murillo@correo.cr', 'Frente a la Plaza de Deportes, Cartago', 'apartamento', 'no', 'poca', 'Deseo companía felina tranquila y Nina es ideal.', '4-6', '1000-3000', 'revisando'),
 (5, 'Ana Solano', '+506 6001 3344', 'ana.solano@correo.cr', 'De la iglesia 200 este, Heredia', 'casa', 'gatos', 'mucha', 'Tengo experiencia cuidando perros mayores como Tina.', 'todo_dia', '3000-7000', 'aprobada');
 
 -- Solicitudes de voluntariado (Costa Rica)
 INSERT INTO solicitudes_voluntariado (nombre, telefono, email, areas, disponibilidad, experiencia) VALUES
-('Patricia Castro', '+506 8777 8888', 'patricia.castro@correo.cr', '["cuidado_directo", "limpieza"]', 'mañanas', 'He colaborado en refugios en el GAM.'),
+('Patricia Castro', '+506 8777 8888', 'patricia.castro@correo.cr', '["cuidado_directo", "limpieza"]', 'mananas', 'He colaborado en refugios en el GAM.'),
 ('Miguel Mora', '+506 8999 0000', 'miguel.mora@correo.cr', '["eventos", "redes"]', 'fines_semana', 'Trabajo en comunicación y eventos de bienestar animal.');
 
 -- Donaciones (Costa Rica)
@@ -152,7 +151,7 @@ INSERT INTO colaboradores_difusion (nombre, email, tipos_difusion, redes_sociale
 CREATE INDEX idx_mascotas_especie ON mascotas(especie);
 CREATE INDEX idx_mascotas_estado ON mascotas(estado);
 CREATE INDEX idx_mascotas_created_at ON mascotas(created_at);
-CREATE INDEX idx_mascotas_tamaño ON mascotas(tamaño);
+CREATE INDEX idx_mascotas_tamano ON mascotas(tamano);
 CREATE INDEX idx_mascotas_genero ON mascotas(genero);
 
 CREATE INDEX idx_solicitudes_mascota_id ON solicitudes_adopcion(mascota_id);

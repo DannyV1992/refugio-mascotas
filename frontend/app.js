@@ -50,11 +50,6 @@ uploadArea.addEventListener('drop', (e) => {
         handleImageFile(files[0]);
     }
 });
-imagenInput.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-        handleImageFile(e.target.files); // CORRECTO: solo pasas el primer archivo
-    }
-});
 function handleImageFile(file) {
     if (file.size > 5 * 1024 * 1024) {
         showToast('La imagen no debe superar los 5MB', 'error');
@@ -81,38 +76,63 @@ removeImageBtn.addEventListener('click', (e) => {
     previewContainer.classList.add('hidden');
 });
 
+imagenInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleImageFile(e.target.files[0]); // ← CORREGIDO: agregué 
+    }
+});
+
 // Envío del formulario
 mascotaForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(mascotaForm);
     let imagen_url = null;
 
+    // 🔥 DEBUG: Verificar si hay archivos
+    console.log('🔥 DEBUG: Archivos seleccionados:', imagenInput.files.length);
+    if (imagenInput.files.length > 0) {
+        console.log('🔥 DEBUG: Archivo:', imagenInput.files[0].name, imagenInput.files.size, 'bytes');
+    }
+
+    // PASO 1: SUBIR IMAGEN SI EXISTE
     if (imagenInput.files.length > 0) {
         const imgFormData = new FormData();
-        imgFormData.append("file", imagenInput.files[0]);
+        imgFormData.append("file", imagenInput.files[0]); // ✅ CORREGIDO: agregué 
+        
+        console.log('🔥 DEBUG: Subiendo imagen...');
         try {
-            const resp = await fetch("http://localhost:8001/upload-image", {
+            const resp = await fetch(`${API_BASE}/upload-image`, { // ✅ CORREGIDO: usar API_BASE
                 method: "POST",
                 body: imgFormData
             });
+            
+            console.log('🔥 DEBUG: Respuesta de upload:', resp.status);
+            
             if (!resp.ok) {
-                showToast("Error al subir la imagen: " + resp.status, "error");
+                const errorText = await resp.text();
+                console.log('❌ ERROR: Error en upload:', errorText);
+                showToast("Error al subir imagen: " + resp.status + " - " + errorText, "error");
                 return;
             }
             const data = await resp.json();
             imagen_url = data.url;
+            console.log('✅ SUCCESS: Imagen subida, URL:', imagen_url);
         } catch (err) {
-            showToast("Error JS en subida de imagen: " + err, "error");
+            console.log('❌ ERROR: JavaScript error en subida:', err);
+            showToast("Error JS en subida imagen: " + err, "error");
             return;
         }
+    } else {
+        console.log('ℹ️ INFO: No hay imagen para subir');
     }
 
+    // PASO 2: PREPARAR DATOS DE MASCOTA
     const mascotaData = {
         nombre: formData.get('nombre'),
         especie: formData.get('especie'),
         edad: formData.get('edad') ? parseInt(formData.get('edad')) : null,
         descripcion: formData.get('descripcion') || '',
-        tamaño: formData.get('tamaño') || null,
+        tamano: formData.get('tamano') || null,  // ✅ CORREGIDO: sin n
         genero: formData.get('genero') || null,
         contacto_nombre: formData.get('contacto_nombre') || null,
         contacto_telefono: formData.get('contacto_telefono') || null,
@@ -120,6 +140,9 @@ mascotaForm.addEventListener('submit', async (e) => {
         imagen_url: imagen_url
     };
 
+    console.log('🔥 DEBUG: Datos de mascota a enviar:', mascotaData);
+
+    // PASO 3: ENVIAR MASCOTA
     try {
         submitBtn.disabled = true;
         submitText.textContent = 'Registrando...';
@@ -127,35 +150,45 @@ mascotaForm.addEventListener('submit', async (e) => {
         const url = editingMascotaId ? `${API_BASE}/mascotas/${editingMascotaId}` : `${API_BASE}/mascotas`;
         const method = editingMascotaId ? 'PUT' : 'POST';
         
+        console.log('🔥 DEBUG: Enviando mascota a:', url);
+        
         const response = await fetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(mascotaData)
         });
 
+        console.log('🔥 DEBUG: Respuesta de mascota:', response.status);
+
         // Capturar mensajes de error específicos
         if (!response.ok) {
             const errorData = await response.json();
             const errorMessage = errorData.detail || 'Error desconocido';
+            console.log('❌ ERROR: Error al guardar mascota:', errorMessage);
             showToast(errorMessage, 'error');
             return; // Salir sin continuar
         }
 
         // Si llegamos aquí, todo salió bien
+        const result = await response.json();
+        console.log('✅ SUCCESS: Mascota guardada:', result);
+        
         showToast(
             editingMascotaId ?
             '¡Información de la mascota actualizada!' :
             '¡Mascota registrada exitosamente! Pronto aparecerá disponible para adopción.'
         );
         resetForm();
-        cargarMascotasRecientes();
+        if (typeof cargarMascotasRecientes === 'function') {
+            cargarMascotasRecientes();
+        }
         
     } catch (error) {
-        console.error('Error:', error);
+        console.error('❌ ERROR: Error de conexión:', error);
         showToast('Error de conexión. Por favor intenta de nuevo.', 'error');
     } finally {
         submitBtn.disabled = false;
-        submitText.textContent = 'Registrar en el Refugio';
+        submitText.textContent = editingMascotaId ? 'Actualizar Mascota' : 'Registrar en el Refugio';
     }
 });
 

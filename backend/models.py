@@ -17,8 +17,8 @@ class EstadoEnum(str, Enum):
     disponible = "disponible"
     adoptado = "adoptado"
 
-class TamañoEnum(str, Enum):
-    pequeño = "pequeno"
+class TamanoEnum(str, Enum):
+    pequeno = "pequeno"
     mediano = "mediano"
     grande = "grande"
 
@@ -29,10 +29,10 @@ class GeneroEnum(str, Enum):
 class MascotaBase(BaseModel):
     nombre: str = Field(..., min_length=1, max_length=100, description="Nombre de la mascota")
     especie: EspecieEnum = Field(..., description="Especie de la mascota")
-    edad: Optional[int] = Field(None, ge=0, le=30, description="Edad en años")
+    edad: Optional[int] = Field(None, ge=0, le=30, description="Edad en anos")
     descripcion: Optional[str] = Field("", max_length=500, description="Descripción de la mascota")
     imagen_url: Optional[str] = Field(None, max_length=500, description="URL de la imagen")
-    tamaño: Optional[TamañoEnum] = Field(None, description="Tamaño de la mascota")
+    tamano: Optional[TamanoEnum] = Field(None, description="Tamano de la mascota")
     genero: Optional[GeneroEnum] = Field(None, description="Género de la mascota")
     contacto_nombre: Optional[str] = Field(None, max_length=100, description="Nombre de contacto")
     contacto_telefono: Optional[str] = Field(None, max_length=20, description="Teléfono de contacto")
@@ -128,7 +128,7 @@ class SolicitudAdopcionResponse(SolicitudAdopcionBase):
 # Modelos para voluntariado
 
 class DisponibilidadEnum(str, Enum):
-    mañanas = "mañanas"
+    mananas = "mananas"
     tardes = "tardes"
     fines_semana = "fines_semana"
     flexible = "flexible"

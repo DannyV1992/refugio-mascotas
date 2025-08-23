@@ -33,17 +33,18 @@ app = FastAPI(title="Refugio de Mascotas API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Crear directorio para imágenes
-UPLOAD_DIR = Path(__file__).parent / "uploads"
+BASE_DIR = Path(__file__).parent
+UPLOAD_DIR = BASE_DIR / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Montar directorio de archivos estáticos
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 # Configuración de BD
 DB_CONFIG = {
@@ -119,19 +120,19 @@ async def crear_mascota(mascota: MascotaCreate):
         raise HTTPException(status_code=400, detail="Formato de teléfono inválido (use formato costarricense: +506 8888 1122 o 8888-1122)")
     
     if mascota.edad is not None and (mascota.edad < 0 or mascota.edad > 30):
-        raise HTTPException(status_code=400, detail="La edad debe estar entre 0 y 30 años")
+        raise HTTPException(status_code=400, detail="La edad debe estar entre 0 y 30 anos")
     
     connection = get_db_connection()
     cursor = connection.cursor()
     try:
         query = """
         INSERT INTO mascotas
-        (nombre, especie, edad, descripcion, imagen_url, tamaño, genero, contacto_nombre, contacto_telefono, estado)
+        (nombre, especie, edad, descripcion, imagen_url, tamano, genero, contacto_nombre, contacto_telefono, estado)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.execute(query, (
             nombre_clean, mascota.especie, mascota.edad,
-            descripcion_clean, mascota.imagen_url, mascota.tamaño,
+            descripcion_clean, mascota.imagen_url, mascota.tamano,
             mascota.genero, contacto_nombre_clean, mascota.contacto_telefono,
             mascota.estado
         ))
@@ -163,12 +164,12 @@ async def actualizar_mascota(mascota_id: int, mascota: MascotaUpdate):
         query = """
         UPDATE mascotas SET
         nombre=%s, especie=%s, edad=%s, descripcion=%s, imagen_url=%s,
-        tamaño=%s, genero=%s, contacto_nombre=%s, contacto_telefono=%s, estado=%s
+        tamano=%s, genero=%s, contacto_nombre=%s, contacto_telefono=%s, estado=%s
         WHERE id=%s
         """
         cursor.execute(query, (
             nombre_clean, mascota.especie, mascota.edad,
-            descripcion_clean, mascota.imagen_url, mascota.tamaño,
+            descripcion_clean, mascota.imagen_url, mascota.tamano,
             mascota.genero, contacto_nombre_clean, mascota.contacto_telefono,
             mascota.estado, mascota_id
         ))
@@ -204,20 +205,22 @@ async def eliminar_mascota(mascota_id: int):
 
 @app.post("/upload-image")
 async def upload_image(file: UploadFile = File(...)):
-    print("Recibiendo petición para subir imagen:", file.filename)
+    print(f"🔥 DEBUG: Recibiendo petición para subir imagen: {file.filename}")
+    print(f"🔥 DEBUG: Content-type: {file.content_type}")
     
-    # Validar tipo de archivo
+    # Validar que sea una imagen
     if not file.content_type.startswith('image/'):
+        print(f"❌ ERROR: Tipo de archivo inválido: {file.content_type}")
         raise HTTPException(status_code=400, detail="El archivo debe ser una imagen")
-    
+
     content = await file.read()
-    print("Tamaño recibido:", len(content))
-    
-    # Validar tamaño (5MB máximo)
+    print(f"🔥 DEBUG: Contenido leído, tamano: {len(content)} bytes")
+
+    # Validar tamano (5MB máximo)
     file_size = len(content)
-    if file_size > 5 * 1024 * 1024:  # 5MB
+    if file_size > 5 * 1024 * 1024: # 5MB
         raise HTTPException(status_code=400, detail="La imagen no debe superar los 5MB")
-    
+
     # Validar que el nombre del archivo sea seguro
     if file.filename:
         filename_clean = sanitize_input(file.filename)
@@ -225,25 +228,27 @@ async def upload_image(file: UploadFile = File(...)):
         filename_clean = re.sub(r'[^a-zA-Z0-9._-]', '', filename_clean)
     else:
         filename_clean = "image"
-    
+
     # Generar nombre único para el archivo
     file_extension = filename_clean.split('.')[-1] if '.' in filename_clean else 'jpg'
     # Validar extensión
     allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp']
     if file_extension.lower() not in allowed_extensions:
         file_extension = 'jpg'
-    
+
     filename = f"{uuid.uuid4()}.{file_extension}"
     file_path = UPLOAD_DIR / filename
-    
+
     # Guardar archivo
     with open(file_path, "wb") as buffer:
         buffer.write(content)
-    
-    print("Guardado archivo en:", file_path)
-    
+
+    print(f"✅ SUCCESS: Archivo guardado en: {file_path}")
+    print(f"✅ SUCCESS: Archivo existe: {file_path.exists()}")
+
     # Retornar URL de acceso
     return {"url": f"/uploads/{filename}"}
+
 
 # ===============================
 # ENDPOINTS PARA ADOPCIONES
