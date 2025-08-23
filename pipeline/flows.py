@@ -28,10 +28,15 @@ class RefugioDataPipeline:
             'database': os.getenv('DB_NAME', 'refugio_mascotas')
         }
         
-        # Crear directorios necesarios
-        Path("backups").mkdir(parents=True, exist_ok=True)
-        Path("logs").mkdir(parents=True, exist_ok=True)
-        Path("reports").mkdir(parents=True, exist_ok=True)
+        # ✅ CORREGIDO: Crear directorios dentro de pipeline/
+        self.base_dir = Path(__file__).parent  # Directorio donde está flows.py
+        
+        # Crear subdirectorios dentro de pipeline/
+        (self.base_dir / "backups").mkdir(parents=True, exist_ok=True)
+        (self.base_dir / "logs").mkdir(parents=True, exist_ok=True)
+        (self.base_dir / "reports").mkdir(parents=True, exist_ok=True)
+        
+        self.log_info(f"Pipeline iniciado - Directorios en: {self.base_dir}")
 
     def get_connection(self):
         """Obtener conexión a la base de datos"""
@@ -134,7 +139,7 @@ class RefugioDataPipeline:
             # Especies más populares
             species_requests = mascotas_df[mascotas_df['id'].isin(solicitudes_df['mascota_id'])].groupby('especie').size()
             
-            # Solicitudes por mes (CORREGIDO)
+            # Solicitudes por mes
             solicitudes_df['created_at'] = pd.to_datetime(solicitudes_df['created_at'])
             monthly_requests = solicitudes_df.groupby(solicitudes_df['created_at'].dt.to_period('M')).size()
             
@@ -164,7 +169,7 @@ class RefugioDataPipeline:
     def generate_daily_report(self, data, analytics):
         """Generar reporte diario"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        report_path = f"reports/daily_report_{timestamp}.json"
+        report_path = self.base_dir / "reports" / f"daily_report_{timestamp}.json"  # ✅ CORREGIDO
         
         try:
             # Calcular estadísticas con manejo de errores
@@ -249,7 +254,7 @@ class RefugioDataPipeline:
     def create_backups(self, data):
         """Crear backups de todas las tablas"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        backup_dir = Path(f"backups/backup_{timestamp}")  # CORREGIDO: sin pipeline/
+        backup_dir = self.base_dir / "backups" / f"backup_{timestamp}"  # ✅ CORREGIDO
         backup_dir.mkdir(parents=True, exist_ok=True)
         
         for table_name, df in data.items():
@@ -324,7 +329,7 @@ class RefugioDataPipeline:
                 "alerts_generated": len(report.get('alertas', []))
             }
             
-            log_file = f"logs/pipeline_log_{datetime.now().strftime('%Y%m%d')}.json"  # CORREGIDO
+            log_file = self.base_dir / "logs" / f"pipeline_log_{datetime.now().strftime('%Y%m%d')}.json"  # ✅ CORREGIDO
             with open(log_file, 'a', encoding='utf-8') as f:
                 f.write(json.dumps(log_entry, ensure_ascii=False, default=str) + '\n')
             
@@ -354,18 +359,29 @@ def schedule_pipeline():
     schedule.every().day.at("02:00").do(run_pipeline)  # 2 AM diario
     schedule.every().sunday.at("01:00").do(run_pipeline)  # Domingo 1 AM
     
-    print("Pipeline programado - presiona Ctrl+C para detener")
+    print("🕐 Pipeline programado - presiona Ctrl+C para detener")
+    print("📅 Ejecuciones:")
+    print("   - Diario: 2:00 AM")
+    print("   - Semanal: Domingos 1:00 AM")
+    
     try:
         while True:
             schedule.run_pending()
             time.sleep(60)
     except KeyboardInterrupt:
-        print("\nPipeline detenido")
+        print("\n🛑 Pipeline detenido")
 
 if __name__ == "__main__":
     import sys
     
+    print("🐾 REFUGIO DE MASCOTAS - PIPELINE DE DATOS")
+    print("=" * 50)
+    
     if len(sys.argv) > 1 and sys.argv[1] == "--schedule":
         schedule_pipeline()
     else:
-        run_pipeline()
+        success = run_pipeline()
+        if success:
+            print("\n🎉 Pipeline ejecutado exitosamente!")
+        else:
+            print("\n❌ Pipeline falló. Revisa los logs.")
